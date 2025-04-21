@@ -39,6 +39,9 @@ deck:
   id: int, pk
   format_id: int, fk
   hero_card_id: int, fk
+  version_name: char(16), default="latest"
+  prev_version_id: int, fk, index
+  visibility: enum[public, link, private], index
   name: CHAR(64), index
   description: CHAR(256), default=""
   created_at: dt, index
