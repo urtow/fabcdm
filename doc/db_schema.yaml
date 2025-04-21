@@ -108,23 +108,20 @@ card:
   set_id: int, fk, index
   pitch_value: int[0-3], nullable, index
   play_cost: int, nullable, index
-  card_type_id: int, fk, index
-  card_sybtype_id: int, fk, index
+  # Их тут может быть больше одного и выборку надо делать по ним
+  card_types_id: list[int], fk, index
+  card_subtypes_id: list[int], fk, index
+  card_supertypes_id: list[int], fk, index
   illustrator_id: int, fk, index
   attack_value: int, nullable, index
   block_value: int, nullable, index
-
   collectable_number: CHAR(6), index
-  classes_id: list[int]
   name: CHAR(64)
   languages_id: list[int], fk
   keywords_id: list[int], fk
   generate_tokens: list[int], pk
   full_text: CHAR(512)
 
-class:
-  id: int, pk
-  name: char(32)
 
 keyword:
   id: int, pk
@@ -144,6 +141,10 @@ card_type:
   name: CHAR(64)
 
 card_subtype:
+  id: int, pk
+  name: CHAR(64)
+
+card_supertypes:
   id: int, pk
   name: CHAR(64)
 
