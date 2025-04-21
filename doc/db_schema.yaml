@@ -1,4 +1,4 @@
-# По умолчаню все поля считаются Nullable=Fase, если не указано обратное
+# По умолчаню все поля считаются Nullable=False, если не указано обратное
 
 user:
   id: int, pk
@@ -22,8 +22,8 @@ binder:
   created_at: dt, index
   updated_at: dt, index
   terminated_at: dt, index, nullable
-  card_collection: int, kf
-  cards_id: list[int], pk
+  card_collection: int, fk
+  cards_id: list[int], fk
 
 deck_collection:
   id: int, pk
@@ -47,11 +47,20 @@ deck:
   created_at: dt, index
   updated_at: dt, index
   terminated_at: dt, index, nullable
-  main_cards_id: list[int], pk
-  inventory_cards_id: list[int], pk
-  token_cards_id: list[int], pk
-  equip_cards_id: list[int], pk
-  optional_cards_id: list[int], pk
+  main_cards_id: list[int], fk
+  inventory_cards_id: list[int], fk
+  token_cards_id: list[int], fk
+  equip_cards_id: list[int], fk
+  optional_cards_id: list[int], fk
+  matchups_id: list[int], fk
+
+matchup:
+  id: int, fk
+  name: char(16)
+  prefer_first_turn: bool
+  notes: CHAR(256), default=""
+  include_cards_ids: list[int], fk
+  exclude_cards_ids: list[int], fk 
 
 card_price:
   id: int. pk
@@ -84,7 +93,6 @@ deck_valuate:
   currency_id: int, fk
   value: decimal
   deck: int, fk
-
 
 ban_list:
   id: int, pk
