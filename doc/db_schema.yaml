@@ -51,6 +51,7 @@ deck:
   inventory_cards_id: list[int], pk
   token_cards_id: list[int], pk
   equip_cards_id: list[int], pk
+  optional_cards_id: list[int], pk
 
 card_price:
   id: int. pk
