@@ -1,0 +1,154 @@
+# По умолчаню все поля считаются Nullable=Fase, если не указано обратное
+
+user:
+  id: int, pk
+  # Login and other - later
+
+card_collection:
+  id: int, pk
+  name: CHAR(64), index
+  user_id: int, fk, index
+  exists: bool, index
+  description: CHAR(256), default=""
+  created_at: dt, index
+  updated_at: dt, index
+  terminated_at: dt, index, nullable
+  binders: list[int], fk
+
+binder:
+  id: int, pk
+  name: CHAR(64), index
+  description: CHAR(256), default=""
+  created_at: dt, index
+  updated_at: dt, index
+  terminated_at: dt, index, nullable
+  card_collection: int, kf
+  cards_id: list[int], pk
+
+deck_collection:
+  id: int, pk
+  name: CHAR(64), index
+  user_id: int, fk
+  description: CHAR(256), default=""
+  created_at: dt, index
+  updated_at: dt, index
+  terminated_at: dt, index, nullable
+  decks_id: list[int], fk
+
+deck:
+  id: int, pk
+  format_id: int, fk
+  hero_card_id: int, fk
+  name: CHAR(64), index
+  description: CHAR(256), default=""
+  created_at: dt, index
+  updated_at: dt, index
+  terminated_at: dt, index, nullable
+  main_cards_id: list[int], pk
+  inventory_cards_id: list[int], pk
+  token_cards_id: list[int], pk
+  equip_cards_id: list[int], pk
+
+card_price:
+  id: int. pk
+  card_id: int, fk
+  created_at: dt, index
+  store_id: int, fk
+  currency_id: int, fk
+  price: decimal
+
+collection_valuate:
+  id: int, pk
+  created_at: dt, index
+  store_id: int, fk
+  currency_id: int, fk
+  value: decimal
+  collection_id: int, fk
+
+binder_valuate:
+  id: int, pk
+  created_at: dt, index
+  store_id: int, fk
+  currency_id: int, fk
+  value: decimal
+  binder_id: int, fk
+
+deck_valuate:
+  id: int, pk
+  created_at: dt, index
+  store_id: int, fk
+  currency_id: int, fk
+  value: decimal
+  deck: int, fk
+
+
+ban_list:
+  id: int, pk
+  reason: enum(Banned, LivingLegend)
+  format_id: int
+  cards_id: list[int]
+
+
+# 100% static data down
+# Does not change after insert
+card:
+  id: int, pk
+  set_id: int, fk, index
+  pitch_value: int[0-3], nullable, index
+  play_cost: int, nullable, index
+  card_type_id: int, fk, index
+  card_sybtype_id: int, fk, index
+  illustrator_id: int, fk, index
+  attack_value: int, nullable, index
+  block_value: int, nullable, index
+
+  collectable_number: CHAR(6), index
+  classes_id: list[int]
+  name: CHAR(64)
+  languages_id: list[int], fk
+  keywords_id: list[int], fk
+  generate_tokens: list[int], pk
+  full_text: CHAR(512)
+
+class:
+  id: int, pk
+  name: char(32)
+
+keyword:
+  id: int, pk
+  name: CHAR(16)
+
+language:
+  id: int, pk
+  short_name: CHAR(4), index
+  full_name: CHAR(16)
+
+illustrator:
+  id: int, pk
+  name: char(64)
+
+card_type:
+  id: int, pk
+  name: CHAR(64)
+
+card_subtype:
+  id: int, pk
+  name: CHAR(64)
+
+set:
+  id: int, pk
+  short_name: CHAR(3), index
+  full_name: CHAR(64), index
+
+store:
+  id: int, pk
+  name: char(64)
+
+format:
+  int: id, pk
+  name: char(64)
+
+curreny:
+  id: int, pk
+  short_name: char(6), index
+  full_name: chart(24), index
