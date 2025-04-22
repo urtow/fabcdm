@@ -7,13 +7,14 @@ user:
 card_collection:
   id: int, pk
   name: CHAR(64), index
+  # One user may have more that one collection, but collection ALWAYS have one owner
   user_id: int, fk, index
   exists: bool, index
   description: CHAR(256), default=""
   created_at: dt, index
   updated_at: dt, index
   terminated_at: dt, index, nullable
-  binders: list[int], fk
+  binders_id: list[int], fk
 
 binder:
   id: int, pk
@@ -22,7 +23,8 @@ binder:
   created_at: dt, index
   updated_at: dt, index
   terminated_at: dt, index, nullable
-  card_collection: int, fk
+  # Collection may have any number of binders, binder may be owned only by ONE collection
+  card_collection_id: int, fk
   cards_id: list[int], fk
 
 deck_collection:
@@ -97,8 +99,8 @@ deck_valuate:
 ban_list:
   id: int, pk
   reason: enum(Banned, LivingLegend)
-  format_id: int
-  cards_id: list[int]
+  format_id: int, fk
+  cards_id: list[int], fk
 
 
 # 100% static data down
@@ -106,21 +108,33 @@ ban_list:
 card:
   id: int, pk
   set_id: int, fk, index
-  pitch_value: int[0-3], nullable, index
-  play_cost: int, nullable, index
-  # Их тут может быть больше одного и выборку надо делать по ним
+  full_text: CHAR(512)
+  name: CHAR(64)
+  illustrator_id: int, fk, index
+  collectable_number: CHAR(6), index
+  languages_id: list[int], fk
+
+  # Zero or more. Will be filtered by "in"
+  # So i have no idea how create this
+  # All cards types + subtypes + supertypes + keywords is less than 1000
+  # So may be "reverse" key? And if we need
+  # Yes for now they are 100% static, but if we assume that no....
+  # Basically we will search by this fields A LOT, mostly like:
+  # SELECT all cards with this types and this supertypes and....
   card_types_id: list[int], fk, index
   card_subtypes_id: list[int], fk, index
   card_supertypes_id: list[int], fk, index
-  illustrator_id: int, fk, index
+  keywords_id: list[int], fk
+
+  # Some cards MAY does not have this fields (NULL)
+  # Checking of this at python. 
+  pitch_value: int[0-3], nullable, index
+  play_cost: int, nullable, index
   attack_value: int, nullable, index
   block_value: int, nullable, index
-  collectable_number: CHAR(6), index
-  name: CHAR(64)
-  languages_id: list[int], fk
-  keywords_id: list[int], fk
+
+  # Does not need index, we NEVER search by this
   generate_tokens: list[int], pk
-  full_text: CHAR(512)
 
 
 keyword:
