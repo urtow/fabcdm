@@ -37,8 +37,12 @@ deck_collection:
   terminated_at: dt, index, nullable
   decks_id: list[int], fk
 
+# C version_name и prev_version_id есть вопрос как правильно организовать. 
+# Представь себе мини git, где у тебя нет веток.
+# freezed_at показывает, что у нас есть следующая ветка и эту уже менять нелья
 deck:
   id: int, pk
+  inherited_from_id: int, fk, nullable
   format_id: int, fk
   hero_card_id: int, fk
   version_name: char(16), default="latest"
@@ -49,6 +53,7 @@ deck:
   created_at: dt, index
   updated_at: dt, index
   terminated_at: dt, index, nullable
+  freezed_at: dt, index, nullable
   main_cards_id: list[int], fk
   inventory_cards_id: list[int], fk
   token_cards_id: list[int], fk
